@@ -24,15 +24,24 @@ ___
 - Mở Document Project
   `cargo doc --open`
 
+___
+
+- Writing Automated Tests:
+  `cargo test`
+
+- Check a Cargo Project:
+  `cargo check`
 
 - Building a Cargo Project:
   `cargo build`
-- Building a Cargo Project for Develop:
-  `cargo check`
+  `cargo build --release` or `cargo build -r`
+
 - Building and Running a Cargo Project:
   `cargo run`
-- Building for Release
-  `cargo build --release`
+  `cargo run --release` or `cargo run -r`
+
+- Reload automatically when I change source code:
+  `cargo watch -x run`
 
 ___
 
@@ -41,6 +50,8 @@ ___
 > https://visualstudio.microsoft.com/visual-cpp-build-tools/
 >
 > https://www.rust-lang.org/
+>
+> https://rocket.rs/
 
 ### Cargo uses conventions for file placement to make it easy to dive into a new Cargo package:
 
