@@ -23,6 +23,8 @@ ___
   `cargo --version`
 - Mở Document Project
   `cargo doc --open`
+- Generate Secret Key 256-bit base64 key:
+  `openssl rand -base64 32`
 
 ___
 
