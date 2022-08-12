@@ -14,7 +14,7 @@ use crate::routes::{home::*, dynamic_path::*, ignored_segments::*, forwarding::*
 #[launch]
 fn rocket() -> Rocket<Build> {
     rocket::build()
-        .attach(api::stage())
+        // .attach(api::stage())
         .mount("/", routes![index])
         .mount("/dynamic_path", routes![dynamic_path])
         .mount("/ignored", routes![foo_bar, everything])
