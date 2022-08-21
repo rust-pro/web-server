@@ -49,6 +49,8 @@ ___
 
 ## Install Enviroment
 
+> https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
+>
 > https://visualstudio.microsoft.com/visual-cpp-build-tools/
 >
 > https://www.rust-lang.org/
@@ -92,7 +94,7 @@ ___
 - Source code goes in the `src` directory.
 - The **default library** file is `src/lib.rs`.
 - The **default executable** file is `src/main.rs`.
-    - **Other executables** can be placed in `src/bin/`.
+  - **Other executables** can be placed in `src/bin/`.
 - **Benchmarks** go in the `benches` directory.
 - **Examples** go in the `examples` directory.
 - **Integration tests** go in the `tests` directory.

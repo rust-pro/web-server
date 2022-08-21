@@ -17,7 +17,7 @@ async-graphql-rocket = '4.0.10'
 
 anyhow = '1.0.62' # Thư viện này cung cấp anyhow::Error, một loại lỗi dựa trên đối tượng đặc điểm để dễ dàng xử lý lỗi thành ngữ trong các ứng dụng Rust.
 async-trait = '0.1.57' # https://crates.io/crates/async-trait
-deadpool = '0.9.5' # https://docs.rs/deadpool/latest/deadpool/
+deadpool = '0.8.0' # https://docs.rs/deadpool/latest/deadpool/
 dotenv = '0.15.0' # https://docs.rs/dotenv/0.15.0/dotenv/
 serde = '1.0.143' # https://docs.rs/serde/latest/serde/
 sqlx = { version = '0.6.1', features = ['runtime-tokio-rustls', 'postgres', 'macros'] } # https://crates.io/crates/sqlx
