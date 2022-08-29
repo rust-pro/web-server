@@ -9,17 +9,7 @@ description = 'Website của Kukun'
 
 [dependencies]
 cargo-watch = '8.1.2'
+anyhow = "1.0.62"
 rocket = { version = '0.5.0-rc.2', features = ['http2', 'secrets', 'json'] }
-
-#GraphQL
-async-graphql = '4.0.10' # https://crates.io/crates/async-graphql
-async-graphql-rocket = '4.0.10'
-
-anyhow = '1.0.62' # Thư viện này cung cấp anyhow::Error, một loại lỗi dựa trên đối tượng đặc điểm để dễ dàng xử lý lỗi thành ngữ trong các ứng dụng Rust.
-async-trait = '0.1.57' # https://crates.io/crates/async-trait
-deadpool = '0.8.0' # https://docs.rs/deadpool/latest/deadpool/
-dotenv = '0.15.0' # https://docs.rs/dotenv/0.15.0/dotenv/
-serde = '1.0.143' # https://docs.rs/serde/latest/serde/
-sqlx = { version = '0.6.1', features = ['runtime-tokio-rustls', 'postgres', 'macros'] } # https://crates.io/crates/sqlx
-strum = '0.24.1'
-strum_macros = '0.24.3'
+async-graphql = "4.0.12"
+async-graphql-rocket = "4.0.12"
