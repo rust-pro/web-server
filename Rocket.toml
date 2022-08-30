@@ -25,7 +25,9 @@ port = 8000
 workers = 12
 keep_alive = 5
 log_level = "critical"
+# don't use this key! generate your own and keep it private!
 # generate your own and keep it private!: openssl rand -base64 32
 secret_key = "B9PIQurRenJeEA4EnkDm0WDOQ/62ps6wBdqy7swmHiA="
 key = "a release app-key"
 extra = false
+
