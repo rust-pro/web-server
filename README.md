@@ -13,41 +13,139 @@ ___
 
 ## Command Line
 
-- Cập nhật Rust:
-  `rustup update`
-- Gỡ cài đặt Rust:
-  `rustup self uninstall`
-- Kiểm tra phiên bản Rust:
-  `rustc --version`
-- Kiểm tra phiên bản Cargo:
-  `cargo --version`
-- Mở Document Project
-  `cargo doc --open`
+### Rust
+
+```shell
+rustup update
+rustc --version
+rustup self uninstall
+```
+
+### Cargo:
+
+```shell
+cargo --version
+cargo doc --open
+cargo test
+cargo build
+cargo build --release
+cargo build -r
+cargo check
+cargo run
+cargo run --release
+cargo watch -x run
+```
+
 - Generate Secret Key 256-bit base64 key:
-  `openssl rand -base64 32`
+
+```shell
+openssl rand -base64 32
+```
 
 ___
 
-- Writing Automated Tests:
-  `cargo test`
+### Diesel CLI
 
-- Check a Cargo Project:
-  `cargo check`
+- setting the `DATABASE_URL` environment variable
 
-- Building a Cargo Project:
-  `cargo build`
-  `cargo build --release` or `cargo build -r`
+```shell
+echo DATABASE_URL=postgres://postgres:ahkvqca0n@localhost:5432/documents > .env
+```
 
-- Building and Running a Cargo Project:
-  `cargo run`
-  `cargo run --release` or `cargo run -r`
+- Install the CLI tool
 
-- Reload automatically when I change source code:
-  `cargo watch -x run`
+```shell
+cargo install diesel_cli
+cargo install diesel_cli --no-default-features --features postgres
+```
+
+- Setup Diesel for your project
+
+```shell 
+diesel setup
+```
+
+- Generate a new migration with the given name, and the current timestamp as the version.
+
+```shell
+diesel migration generate create_posts
+```
+
+- Next, we’ll write the SQL for migrations:
+
+```postgresql
+CREATE TABLE posts
+(
+  id        SERIAL PRIMARY KEY,
+  title     VARCHAR NOT NULL,
+  body      TEXT    NOT NULL,
+  published BOOLEAN NOT NULL DEFAULT FALSE
+)
+```
+
+And
+
+```postgresql
+DROP TABLE posts
+```
+
+- Runs all pending migrations.
+
+```shell
+diesel migration run
+```
+
+- Reverts and re-runs the latest migration. Useful for testing that a migration can in fact be reverted.
+
+```shell
+diesel migration redo --all
+```
+
+- Reverts the specified migrations.
+
+```shell
+diesel migration revert --all
+```
+
+- Returns true if there are any pending migrations.
+
+```shell
+diesel migration pending
+```
+
+- Lists all available migrations, marking those that have been applied.
+
+```shell
+diesel migration list
+```
+
+### Go Lang migrate CLI
+
+- Installation Windows
+
+```shell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+scoop install migrate
+```
+
+- Usage
+
+```shell
+migrate -help
+migrate -source file://./src/database/migrations -database postgres://postgres:ahkvqca0n@localhost:5432/documents?sslmode=disable up
+```
+
+## NodeJs
+
+```shell
+node
+http.STATUS_CODES
+```
 
 ___
 
-## Install Enviroment
+## Install Environment
 
 > https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
 >
@@ -56,36 +154,40 @@ ___
 > https://www.rust-lang.org/
 >
 > https://rocket.rs/
+>
+> https://diesel.rs/
 
 ### Cargo uses conventions for file placement to make it easy to dive into a new Cargo package:
 
 ```
+
 ├── Cargo.lock
 ├── Cargo.toml
 ├── src/
 │ ├── lib.rs
 │ ├── main.rs
 │ └── bin/
-│     ├── named-executable.rs
-│     ├── another-executable.rs
-│     └── multi-file-executable/
-│         ├── main.rs
-│         └── some_module.rs
+│ ├── named-executable.rs
+│ ├── another-executable.rs
+│ └── multi-file-executable/
+│ ├── main.rs
+│ └── some_module.rs
 ├── benches/
-│   ├── large-input.rs
-│   └── multi-file-bench/
-│       ├── main.rs
-│       └── bench_module.rs
+│ ├── large-input.rs
+│ └── multi-file-bench/
+│ ├── main.rs
+│ └── bench_module.rs
 ├── examples/
-│   ├── simple.rs
-│   └── multi-file-example/
-│       ├── main.rs
-│       └── ex_module.rs
+│ ├── simple.rs
+│ └── multi-file-example/
+│ ├── main.rs
+│ └── ex_module.rs
 └── tests/
-    ├── some-integration-tests.rs
-    └── multi-file-test/
-        ├── main.rs
-        └── test_module.rs
+├── some-integration-tests.rs
+└── multi-file-test/
+├── main.rs
+└── test_module.rs
+
 ```
 
 ***

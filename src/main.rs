@@ -9,7 +9,7 @@ use rocket::{Build, fairing::AdHoc, Rocket, routes};
 
 use crate::config::{AppConfig, read_config};
 use crate::database::{connection::{Pool, PoolManager}, MySchema};
-use crate::models::starword::QueryRoot;
+use crate::models::Query;
 use crate::routes::{graphql::*, hello::*};
 
 mod database;
@@ -23,7 +23,7 @@ fn rocket() -> Rocket<Build> {
   let database_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set");
   let mgr = PoolManager { url: database_url };
   let db_pool = Pool::builder(mgr).build().unwrap();
-  let schema = Schema::build(QueryRoot, EmptyMutation, EmptySubscription).data(db_pool).finish();
+  let schema = Schema::build(Query, EmptyMutation, EmptySubscription).data(db_pool).finish();
   rocket::build()
     .manage(schema).
     mount("/", routes![

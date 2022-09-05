@@ -5,13 +5,9 @@ use serde::{Deserialize, Serialize};
 use sqlx::{self, postgres::PgRow, Row};
 use strum_macros::{Display, EnumString};
 
-use crate::Pool;
+use crate::{Pool, Query};
 
-pub struct QueryRoot;
-
-#[derive(
-Clone, Copy, Debug, Deserialize, Display, Enum, Eq, EnumString, PartialEq, Serialize, sqlx::Type,
-)]
+#[derive(Clone, Copy, Debug, Deserialize, Display, Enum, Eq, EnumString, PartialEq, Serialize, sqlx::Type, )]
 #[sqlx(type_name = "enum_character_kind")]
 pub enum CharacterKind {
   Human,
@@ -47,11 +43,7 @@ impl Character {
 }
 
 #[Object]
-impl QueryRoot {
-  async fn hello(&self, _ctx: &Context<'_>) -> String {
-    "GraphQL says hello!".to_string()
-  }
-
+impl Query {
   async fn characters(&self, ctx: &Context<'_>) -> FieldResult<Vec<Character>> {
     let pool = ctx.data::<Pool>().unwrap();
     let query_str = format!("SELECT id, name, kind FROM starwars.characters");

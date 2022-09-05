@@ -1,7 +1,7 @@
 use async_graphql::{EmptyMutation, EmptySubscription, Schema};
 
-use crate::QueryRoot;
+use crate::Query;
 
-pub type MySchema = Schema<QueryRoot, EmptyMutation, EmptySubscription>;
+pub type MySchema = Schema<Query, EmptyMutation, EmptySubscription>;
 
 pub mod connection;
