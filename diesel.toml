@@ -3,6 +3,7 @@
 
 [print_schema]
 file = "src/schema.rs"
+schema = "main"
 
 [migrations_directory]
 dir = "migrations"

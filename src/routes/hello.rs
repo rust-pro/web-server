@@ -1,6 +1,6 @@
 use rocket::State;
 
-use crate::MySchema;
+use crate::config::database::MySchema;
 
 #[get("/hello")]
 pub async fn hello(_schema: &State<MySchema>) -> String {

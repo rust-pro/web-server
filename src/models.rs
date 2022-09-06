@@ -1,3 +1,1 @@
-pub struct Query;
-
-pub mod starword;
+pub mod posts;
