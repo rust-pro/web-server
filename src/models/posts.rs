@@ -1,19 +1,19 @@
 use std::ops::DerefMut;
 
 use async_graphql::*;
+use chrono::{DateTime, Utc};
 use sqlx::{self, postgres::PgRow, Row};
 
 use crate::config::database::{Pool, Query};
 
-#[derive(SimpleObject, sqlx::FromRow)]
+#[derive(Debug, Clone, SimpleObject, sqlx::FromRow)]
 #[graphql(complex)]
-#[derive(Debug)]
 struct Post {
   id: i32,
   title: String,
   body: String,
   published: bool,
-  created_at: String,
+  created_at: DateTime<Utc>,
 }
 
 #[ComplexObject]
