@@ -1,7 +1,7 @@
 use std::ops::DerefMut;
 
 use async_graphql::*;
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Local};
 use sqlx::{self, postgres::PgRow, Row};
 
 use crate::config::database::{Pool, Query};
@@ -13,7 +13,7 @@ struct Post {
   title: String,
   body: String,
   published: bool,
-  created_at: DateTime<Utc>,
+  created_at: DateTime<Local>,
 }
 
 #[ComplexObject]
