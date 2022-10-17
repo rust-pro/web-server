@@ -15,7 +15,7 @@ mod schema;
 fn rocket() -> Rocket<Build> {
   rocket::build()
     .manage(connection()).
-    mount("/graphql", routes![graphql_query,graphql_request,graphql_playground,hello])
+    mount("/", routes![graphql_query,graphql_request,graphql_playground,hello])
     .mount("/config", routes![read_config])
     .mount("/hello", routes![hello])
     .attach(AdHoc::config::<AppConfig>())

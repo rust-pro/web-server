@@ -3,7 +3,6 @@ use std::env;
 use async_graphql::{EmptyMutation, EmptySubscription, Schema};
 use async_trait::async_trait;
 use deadpool::managed::{Manager, RecycleResult};
-use dotenv::dotenv;
 use sqlx::{Connection, Error as SqlxError, PgConnection};
 
 pub struct Query;
@@ -29,7 +28,7 @@ impl Manager for PoolManager {
 }
 
 pub fn connection() -> Schema<Query, EmptyMutation, EmptySubscription> {
-  dotenv().ok();
+  dotenv::from_filename("./list-post/.env").ok();
   let database_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set");
   let mgr = PoolManager { url: database_url };
   let db_pool = Pool::builder(mgr).build().unwrap();

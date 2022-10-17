@@ -36,14 +36,14 @@ cargo bench
 cargo run
 cargo run --release
 cargo watch -x run
+$env:RUST_BACKTRACE=1; cargo run
+RUST_BACKTRACE=1 cargo run
 ```
 
-- Generate Secret Key 256-bit base64 key: ASN.1 DER formatted private key
+- Generate Secret Key 256-bit base64 key:
 
 ```shell
 openssl rand -base64 32
-openssl genrsa -out rocket.pem 512
-openssl rsa -in rocket.pem -out rocket.der -outform der
 ```
 
 ___
@@ -156,7 +156,11 @@ ___
 > https://visualstudio.microsoft.com/visual-cpp-build-tools/
 > 
 > https://romankudryashov.com/blog/2020/12/graphql-rust/
->
+> 
+> https://romankudryashov.com/blog/2022/07/apollo-router/
+> 
+>https://github.com/rkudryashov/graphql-rust-demo
+> 
 > https://www.rust-lang.org/
 >
 > https://rocket.rs/

@@ -4,7 +4,6 @@ use rocket::serde::Deserialize;
 #[derive(Debug, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct AppConfig {
-  pub key: String,
   pub port: u16,
 }
 
