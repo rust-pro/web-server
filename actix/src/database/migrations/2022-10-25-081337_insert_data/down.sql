@@ -1,0 +1,1 @@
+TRUNCATE main.satellites CASCADE;

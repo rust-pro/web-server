@@ -8,7 +8,7 @@ log_level = "critical" # Max level to log. (off/normal/debug/critical)
 limits = { json = "1MiB", forms = "64 kB", msgpack = "2MiB", "file/jpg" = "5 MiB" } # Streaming read size limits.
 log_level = "critical" # Max level to log. (off/normal/debug/critical)
 max_blocking = 512 # Limit on threads to start for blocking tasks.
-secret_key = "B9PIQurRenJeEA4EnkDm0WDOQ/62ps6wBdqy7swmHiA=" # openssl rand -base64 32
+
 workers = 16 # Number of threads to use for executing futures. (cpu core count)
 
 [debug]
@@ -17,7 +17,6 @@ ident = "Rocket Dev" # If and how to identify via the Server header.
 limits = { json = "10MiB" }
 log_level = "normal"
 port = 8000
-secret_key = "B9PIQurRenJeEA4EnkDm0WDOQ/62ps6wBdqy7swmHiA="
 
 [nyc]
 port = 8000
@@ -27,5 +26,5 @@ ident = "Rocket 1" # If and how to identify via the Server header.
 keep_alive = 5
 log_level = "critical"
 port = 8000
-secret_key = "B9PIQurRenJeEA4EnkDm0WDOQ/62ps6wBdqy7swmHiA="
+secret_key = "fmGv6wauRz/i0zpmMh4l8gukCEhROM+u7QGFiI3qetU=" #openssl rand -base64 32
 

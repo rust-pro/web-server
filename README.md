@@ -1,6 +1,6 @@
 <p align="center">
 <a href="/" target="_blank">
-<img src="logo.svg" width="400">
+<img src="system_structure.svg" alt="System structure">
 </a></p>
 
 <p align="center">
@@ -80,10 +80,10 @@ diesel migration generate create_posts
 ```postgresql
 CREATE TABLE posts
 (
-  id        SERIAL PRIMARY KEY,
-  title     VARCHAR NOT NULL,
-  body      TEXT    NOT NULL,
-  published BOOLEAN NOT NULL DEFAULT FALSE
+    id        SERIAL PRIMARY KEY,
+    title     VARCHAR NOT NULL,
+    body      TEXT    NOT NULL,
+    published BOOLEAN NOT NULL DEFAULT FALSE
 )
 ```
 
@@ -154,7 +154,7 @@ ___
 > https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
 >
 > https://visualstudio.microsoft.com/visual-cpp-build-tools/
-> 
+>
 > https://romankudryashov.com/blog/2020/12/graphql-rust/
 >
 > https://www.rust-lang.org/
@@ -202,7 +202,7 @@ ___
 - Source code goes in the `src` directory.
 - The **default library** file is `src/lib.rs`.
 - The **default executable** file is `src/main.rs`.
-  - **Other executables** can be placed in `src/bin/`.
+    - **Other executables** can be placed in `src/bin/`.
 - **Benchmarks** go in the `benches` directory.
 - **Examples** go in the `examples` directory.
 - **Integration tests** go in the `tests` directory.

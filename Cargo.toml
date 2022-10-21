@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    'satellites-service',
-    'list-post'
+    'list-post',
+    'actix',
 ]

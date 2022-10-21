@@ -5,10 +5,9 @@ description = "boilerplate rocket, async-graphql, sqlx"
 version = "0.1.0"
 authors = ["Kukun <hainghia.developer@gmail.com>", "HaiNghia <hohainghia19@gmail.com>"]
 edition = "2021"
-default-run = 'list-post'
 
 [dependencies]
-rocket = { version = "0.5.0-rc.2", features = ['json', "secrets", "http2"] }
+rocket = { version = "0.5.0-rc.2", features = ['json', 'secrets', 'http2'] }
 sqlx = { version = "0.6.2", features = ["runtime-tokio-rustls", "postgres", "macros", "chrono"] }
 diesel = { version = "2.0.1", features = ["postgres", "chrono"] }
 anyhow = "1.0.65"
