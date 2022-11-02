@@ -22,7 +22,7 @@ rustup self uninstall
 cargo install cargo-watch
 ```
 
-### Cargo:
+# Cargo:
 
 ```shell
 cargo --version
@@ -36,6 +36,12 @@ cargo bench
 cargo run
 cargo run --release
 cargo watch -x run
+```
+
+## Run Apollo Router with Environment variable
+
+```shell
+cargo run --bin apollo-router -- -s ./apollo-router/supergraph.graphql -c ./apollo-router/router.yaml
 ```
 
 - Generate Secret Key 256-bit base64 key: ASN.1 DER formatted private key
@@ -145,6 +151,58 @@ migrate -source file://./src/database/migrations -database postgres://postgres:a
 ```shell
 node
 http.STATUS_CODES
+```
+
+## Install make
+
+```shell
+choco install make
+make supergraph
+```
+
+# Apollo Router Manager
+
+https://www.apollographql.com/docs/federation/quickstart/local-composition/
+
+## Install the Rover CLI
+
+MacOS / Unix-like
+
+```shell
+curl -sSL https://rover.apollo.dev/nix/latest | sh
+```
+
+Windows
+
+```shell
+iwr 'https://rover.apollo.dev/win/latest' | iex
+```
+
+## The Apollo Router
+
+https://www.apollographql.com/docs/router/quickstart/
+
+Automatic download (Linux, OSX, WSL, Windows Git Bash) Doesn't run on Powershell
+
+```shell
+curl -sSL https://router.apollo.dev/download/nix/latest | sh
+```
+
+If running on Powershell need to download: https://github.com/apollographql/router/releases
+Unzip and Copy the `router.exe` file to the project root directory
+
+## Compose a supergraph schema based on a supergraph configuration file
+
+```shell
+rover supergraph compose --config ./supergraph.yaml
+# Creates prod-schema.graphql or overwrites if it already exists
+rover supergraph compose --config ./supergraph.yaml > supergraph.graphql
+```
+
+## Provide the composed schema to the router
+
+```shell
+./router --supergraph=supergraph.graphql
 ```
 
 ___

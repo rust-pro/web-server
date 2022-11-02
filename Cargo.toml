@@ -1,5 +1,8 @@
 [workspace]
 members = [
-    'list-post',
-    'actix',
+    'common-utils',
+    'apollo-router',
+    'microservice/post-service',
+    'microservice/planets-service',
+    'microservice/satellites-service'
 ]

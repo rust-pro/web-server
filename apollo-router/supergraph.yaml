@@ -1,0 +1,11 @@
+federation_version: 2
+
+subgraphs:
+  planets-service:
+    routing_url: http://localhost:8001
+    schema:
+      subgraph_url: http://localhost:8001
+  satellites-service:
+    routing_url: http://localhost:8002
+    schema:
+      subgraph_url: http://localhost:8002
