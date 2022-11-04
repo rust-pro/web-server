@@ -5,7 +5,6 @@ description = "boilerplate rocket, async-graphql, sqlx"
 version = "0.1.0"
 authors = ["Kukun <hainghia.developer@gmail.com>", "HaiNghia <hohainghia19@gmail.com>"]
 edition = "2021"
-default-run = 'list-post'
 
 [dependencies]
 rocket = { version = "0.5.0-rc.2", features = ['json', "secrets", "http2"] }

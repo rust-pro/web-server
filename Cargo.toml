@@ -2,7 +2,9 @@
 members = [
     'common-utils',
     'apollo-router',
+    'users',
     'microservice/post-service',
     'microservice/planets-service',
-    'microservice/satellites-service'
+    'microservice/satellites-service',
+    'microservice/auth-service'
 ]

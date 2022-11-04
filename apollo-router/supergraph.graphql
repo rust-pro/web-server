@@ -59,6 +59,7 @@ type InhabitedPlanetDetails implements Details
 scalar join__FieldSet
 
 enum join__Graph {
+  AUTH_SERVICE @join__graph(name: "auth-service", url: "http://localhost:8003")
   PLANETS_SERVICE @join__graph(name: "planets-service", url: "http://localhost:8001")
   SATELLITES_SERVICE @join__graph(name: "satellites-service", url: "http://localhost:8002")
 }
@@ -86,9 +87,12 @@ enum link__Purpose {
 }
 
 type Mutation
+  @join__type(graph: AUTH_SERVICE)
   @join__type(graph: PLANETS_SERVICE)
 {
-  createPlanet(planet: PlanetInput!): Planet!
+  createUser(user: UserInput!): User! @join__field(graph: AUTH_SERVICE)
+  signIn(input: SignInInput!): String! @join__field(graph: AUTH_SERVICE)
+  createPlanet(planet: PlanetInput!): Planet! @join__field(graph: PLANETS_SERVICE)
 }
 
 """
@@ -135,13 +139,22 @@ enum PlanetType
 }
 
 type Query
+  @join__type(graph: AUTH_SERVICE)
   @join__type(graph: PLANETS_SERVICE)
   @join__type(graph: SATELLITES_SERVICE)
 {
+  getUsers: [User!]! @join__field(graph: AUTH_SERVICE)
   getPlanets: [Planet!]! @join__field(graph: PLANETS_SERVICE)
   getPlanet(id: ID!): Planet @join__field(graph: PLANETS_SERVICE)
   getSatellites: [Satellite!]! @join__field(graph: SATELLITES_SERVICE)
   getSatellite(id: ID!): Satellite @join__field(graph: SATELLITES_SERVICE)
+}
+
+enum Role
+  @join__type(graph: AUTH_SERVICE)
+{
+  ADMIN
+  USER
 }
 
 type Satellite
@@ -151,6 +164,13 @@ type Satellite
   name: String!
   lifeExists: LifeExists!
   firstSpacecraftLandingDate: NaiveDate
+}
+
+input SignInInput
+  @join__type(graph: AUTH_SERVICE)
+{
+  username: String!
+  password: String!
 }
 
 type Subscription
@@ -165,4 +185,23 @@ type UninhabitedPlanetDetails implements Details
 {
   meanRadius: BigDecimal!
   mass: BigInt!
+}
+
+type User
+  @join__type(graph: AUTH_SERVICE)
+{
+  username: String!
+  firstName: String!
+  lastName: String!
+  role: Role!
+}
+
+input UserInput
+  @join__type(graph: AUTH_SERVICE)
+{
+  username: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  role: Role!
 }

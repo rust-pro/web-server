@@ -4,7 +4,7 @@ use async_graphql::*;
 use serde::{Deserialize, Serialize};
 use strum_macros::{Display, EnumString};
 
-use common_utils::{CustomError, FORBIDDEN_MESSAGE};
+use common_utils::{check_user_role_is_allowed, CustomError, FORBIDDEN_MESSAGE};
 
 use crate::persistence::model::{NewUserEntity, UserEntity};
 use crate::persistence::repository;
@@ -47,7 +47,7 @@ impl Mutation {
 
     async fn sign_in(&self, ctx: &Context<'_>, input: SignInInput) -> Result<String> {
         let user = repository::get_user(&input.username, &mut get_conn_from_ctx(ctx))?;
-
+        // dbg!(&input.password);
         if verify_password(&user.hash, &input.password)? {
             let role = AuthRole::from_str(user.role.as_str())?;
             let new_token = create_jwt_token(user.username, role, &get_jwt_secret_key())?;
@@ -77,6 +77,7 @@ struct UserInput {
 
 #[derive(Copy, Clone, Eq, PartialEq, Serialize, Deserialize, Enum, Display, EnumString)]
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
+#[derive(Debug)]
 pub enum Role {
     Admin,
     User,
@@ -98,7 +99,7 @@ impl From<&UserEntity> for User {
         }
     }
 }
-
+#[derive(Debug)]
 struct RoleGuard {
     role: AuthRole,
 }
@@ -113,10 +114,17 @@ impl RoleGuard {
 impl Guard for RoleGuard {
     async fn check(&self, ctx: &Context<'_>) -> Result<()> {
         let maybe_getting_role_result = ctx.data_opt::<Result<Option<AuthRole>, CustomError>>();
+        println!("&self =  {:?}", &self);
+
+        
+
+
         match maybe_getting_role_result {
             Some(getting_role_result) => {
-                let check_role_result =
-                    common_utils::check_user_role_is_allowed(getting_role_result, &self.role);
+                println!("getting_role_result == {:?}", getting_role_result);
+                let check_role_result = check_user_role_is_allowed(getting_role_result, &self.role);
+
+                // println!("check_role_result = {:?}", check_role_result);
                 match check_role_result {
                     Ok(_) => Ok(()),
                     Err(e) => Err(Error::new(e.message)),

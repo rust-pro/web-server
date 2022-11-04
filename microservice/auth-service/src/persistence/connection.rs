@@ -6,7 +6,7 @@ use diesel::r2d2::{ConnectionManager, Pool};
 pub type PgPool = Pool<ConnectionManager<PgConnection>>;
 
 pub fn create_connection_pool() -> PgPool {
-    dotenv::from_filename("./auth-service/.env").ok();
+    dotenv::from_filename("./microservice/auth-service/.env").ok();
     let db_url = env::var("DATABASE_URL").expect("Cant get DB");
 
 

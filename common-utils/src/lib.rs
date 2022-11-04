@@ -16,7 +16,7 @@ pub struct Claims {
     pub role: String,
 }
 
-#[derive(Eq, PartialEq, Display, EnumString)]
+#[derive(Eq, PartialEq, Display, EnumString, Debug)]
 #[strum(serialize_all = "SCREAMING_SNAKE_CASE")]
 pub enum Role {
     Admin,
@@ -35,10 +35,10 @@ pub fn get_role(http_request: HttpRequest) -> Result<Option<Role>, CustomError> 
     }
 }
 
-pub fn check_user_role_is_allowed(
-    getting_role_result: &Result<Option<Role>, CustomError>,
-    allowed_role: &Role,
-) -> Result<(), CustomError> {
+pub fn check_user_role_is_allowed(getting_role_result: &Result<Option<Role>, CustomError>, allowed_role: &Role) -> Result<(), CustomError> {
+    println!("input = {:?} -> {:?}", getting_role_result, allowed_role);
+
+
     let maybe_role = match getting_role_result {
         Ok(maybe_role) => maybe_role,
         Err(e) => {
@@ -47,6 +47,8 @@ pub fn check_user_role_is_allowed(
                 .into())
         }
     };
+
+    println!("maybe_role = {:#?}", maybe_role);
 
     match maybe_role {
         Some(role) => {

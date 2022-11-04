@@ -9,3 +9,7 @@ subgraphs:
     routing_url: http://localhost:8002
     schema:
       subgraph_url: http://localhost:8002
+  auth-service:
+    routing_url: http://localhost:8003
+    schema:
+      subgraph_url: http://localhost:8003

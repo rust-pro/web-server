@@ -10,10 +10,26 @@
 </p>
 
 ___
+# Installed request
 
+[Rust](https://www.rust-lang.org/tools/install)
+
+[Postgresql](https://www.postgresql.org/download/)
+
+[Apache Kafka](https://kafka.apache.org/quickstart)
+
+[Node.js®](https://nodejs.org/)
+
+[Diesel CLI](https://diesel.rs/guides/getting-started.html) (to install run `cargo install diesel_cli --no-default-features --features postgres`)
+
+[CMake](https://cmake.org/download/#latest). (this is needed for the rust-rdkafka crate to work). Add Cmake path `C:\Program Files\CMake\bin` into environment variable in Window
+
+[LLVM](https://releases.llvm.org/download.html). (this is needed for the rust-rdkafka crate to work). Add Cmake path `C:\Program Files\CMake\bin` into environment variable in Window
+
+---
 ## Command Line
 
-### Rust
+## Rust
 
 ```shell
 rustup update
@@ -22,7 +38,35 @@ rustup self uninstall
 cargo install cargo-watch
 ```
 
-# Cargo:
+
+## Install Nightly Rust
+https://doc.rust-lang.org/book/appendix-07-nightly-rust.html
+```shell
+rustup toolchain install nightly
+rustup toolchain list
+rustup override set nightly
+```
+
+## PostgresQL
+https://www.postgresql.org/download/
+https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+WARNING: Console code page (437) differs from Windows code page (1252) 8-bit characters might not work correctly. See psql reference page "Notes for Windows users" for details.
+```shell
+chcp 1252
+psql --username postgres --host localhost --port 5432
+```
+- Drop Database Error
+Database Name: database_name
+`*ERROR:  database "actix" is being accessed by other users*
+*DETAIL:  There are 15 other sessions using the database.*`
+```shell
+drop database database_name;
+REVOKE CONNECT ON DATABASE database_name FROM public;
+SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'database_name';
+drop database database_name;
+```
+
+## Cargo:
 
 ```shell
 cargo --version
@@ -35,11 +79,11 @@ cargo check
 cargo bench
 cargo run
 cargo run --release
-cargo watch -x run
+cargo watch --watch src --exec run
 ```
 
 ## Run Apollo Router with Environment variable
-
+https://github.com/apollographql/supergraph-demo-fed2/tree/main/supergraph
 ```shell
 cargo run --bin apollo-router -- -s ./apollo-router/supergraph.graphql -c ./apollo-router/router.yaml
 ```
@@ -47,6 +91,7 @@ cargo run --bin apollo-router -- -s ./apollo-router/supergraph.graphql -c ./apol
 - Generate Secret Key 256-bit base64 key: ASN.1 DER formatted private key
 
 ```shell
+choco install openssl
 openssl rand -base64 32
 openssl genrsa -out rocket.pem 512
 openssl rsa -in rocket.pem -out rocket.der -outform der
@@ -59,6 +104,7 @@ ___
 - setting the `DATABASE_URL` environment variable
 
 ```shell
+# DATABASE_URL: postgres://{user}:{password}@{hostname}:{port}/{database-name}
 echo DATABASE_URL=postgres://postgres:ahkvqca0n@localhost:5432/documents > .env
 ```
 
@@ -160,6 +206,15 @@ choco install make
 make supergraph
 ```
 
+# Docker
+```shell
+docker kill $(docker ps -aq); docker rm $(docker ps -aq); docker rmi $(docker images -aq); docker volume prune -f;
+
+docker compose -f docker-compose.development.yml build; docker compose -f docker-compose.development.yml up;
+
+docker compose -f docker-compose.production.yml build; docker compose -f docker-compose.production.yml up;
+```
+
 # Apollo Router Manager
 
 https://www.apollographql.com/docs/federation/quickstart/local-composition/
@@ -178,6 +233,8 @@ Windows
 iwr 'https://rover.apollo.dev/win/latest' | iex
 ```
 
+- Add path to environment variable `C:\Users\username\.rover\bin`
+
 ## The Apollo Router
 
 https://www.apollographql.com/docs/router/quickstart/
@@ -193,8 +250,16 @@ Unzip and Copy the `router.exe` file to the project root directory
 
 ## Compose a supergraph schema based on a supergraph configuration file
 
+`By installing this plugin, you accept the terms and conditions outlined by this license.
+More information on the ELv2 license can be found here: https://go.apollo.dev/elv2.
+Do you accept the terms and conditions of the ELv2 license? [y/N]
+error: This command requires that you accept the terms of the ELv2 license.`
+### Run:
 ```shell
 rover supergraph compose --config ./supergraph.yaml
+```
+Instead of
+```shell
 # Creates prod-schema.graphql or overwrites if it already exists
 rover supergraph compose --config ./supergraph.yaml > supergraph.graphql
 ```

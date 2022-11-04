@@ -22,7 +22,7 @@ fn setup_database(docker: &Cli) -> Container<Postgres> {
     env::set_var(
         "DATABASE_URL",
         format!(
-            "postgres://postgres:password@localhost:{}/users-db",
+            "postgres://postgres:ahkvqca0n@localhost:{}/users",
             pg_port
         ),
     );

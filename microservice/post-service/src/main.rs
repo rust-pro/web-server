@@ -15,7 +15,7 @@ async fn main() -> std::io::Result<()> {
     let app_url: String = env::var("APP_URL").expect("Cant get DB");
     run_migrations(&mut pool.get().expect("Can't get DB connection"));
     let schema = web::Data::new(create_schema_with_context(pool));
-    println!("Server start on http://{}", app_url);
+    println!("start http://{}", app_url);
     HttpServer::new(move || {
         App::new().configure(configure).app_data(schema.clone())
     }).bind(app_url)?.run().await
