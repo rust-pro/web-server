@@ -6,5 +6,4 @@ members = [
     'microservice/post-service',
     'microservice/planets-service',
     'microservice/satellites-service',
-    'microservice/auth-service'
 ]

@@ -1,5 +1,6 @@
 extern crate users;
 
+use std::env::var;
 use actix_web::{App, HttpServer, web};
 use dotenv::dotenv;
 use web::Data;
@@ -12,12 +13,12 @@ use users::database::migrate::run_migrations;
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
+    let url: String = var("APP_URL").expect("Cant get DB");
     let pool: PgPool = create_connection();
     run_migrations(&mut pool.get().expect("Can't run migrate"));
     let schema = Data::new(create_schema_with_context(pool));
-    println!("Server on start: http://localhost:1405/");
-    println!("Thiên di");
+    println!("Server on start: http://{}/", url);
     HttpServer::new(move || {
         App::new().configure(user_route).app_data(schema.clone())
-    }).bind("0.0.0.0:80")?.run().await
+    }).bind(url)?.run().await
 }

@@ -1,12 +1,12 @@
-use async_graphql::{EmptyMutation, EmptySubscription, Schema};
-use crate::app::resolvers::user_resolver::UserQuery;
+use async_graphql::{EmptySubscription, Schema};
+use crate::app::resolvers::user_resolver::{UserMutation, UserQuery};
 use crate::config::database::PgPool;
 
 /**
-# Title
+# Title create_schema_with_context User
  */
-pub fn create_schema_with_context(pool: PgPool) -> Schema<UserQuery, EmptyMutation, EmptySubscription> {
-    Schema::build(UserQuery, EmptyMutation, EmptySubscription)
+pub fn create_schema_with_context(pool: PgPool) -> Schema<UserQuery, UserMutation, EmptySubscription> {
+    Schema::build(UserQuery, UserMutation, EmptySubscription)
         .data(pool)
         .finish()
 }

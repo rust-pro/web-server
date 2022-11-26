@@ -1,3 +1,4 @@
+pub mod requests;
 pub mod resolvers;
 pub mod repository;
 pub mod types;
