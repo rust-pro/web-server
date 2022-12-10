@@ -10,6 +10,13 @@
 </p>
 
 ___
+
+# Git Repo
+
+```shell
+start https://github.com/rust-pro/web-server
+```
+
 # Installed request
 
 [Rust](https://www.rust-lang.org/tools/install)
@@ -20,13 +27,17 @@ ___
 
 [Node.js®](https://nodejs.org/)
 
-[Diesel CLI](https://diesel.rs/guides/getting-started.html) (to install run `cargo install diesel_cli --no-default-features --features postgres`)
+[Diesel CLI](https://diesel.rs/guides/getting-started.html) (to install
+run `cargo install diesel_cli --no-default-features --features postgres`)
 
-[CMake](https://cmake.org/download/#latest). (this is needed for the rust-rdkafka crate to work). Add Cmake path `C:\Program Files\CMake\bin` into environment variable in Window
+[CMake](https://cmake.org/download/#latest). (this is needed for the rust-rdkafka crate to work). Add Cmake
+path `C:\Program Files\CMake\bin` into environment variable in Window
 
-[LLVM](https://releases.llvm.org/download.html). (this is needed for the rust-rdkafka crate to work). Add Cmake path `C:\Program Files\CMake\bin` into environment variable in Window
+[LLVM](https://releases.llvm.org/download.html). (this is needed for the rust-rdkafka crate to work). Add Cmake
+path `C:\Program Files\CMake\bin` into environment variable in Window
 
 ---
+
 ## Command Line
 
 ## Rust
@@ -38,9 +49,10 @@ rustup self uninstall
 cargo install cargo-watch
 ```
 
-
 ## Install Nightly Rust
+
 https://doc.rust-lang.org/book/appendix-07-nightly-rust.html
+
 ```shell
 rustup toolchain install nightly
 rustup toolchain list
@@ -48,17 +60,22 @@ rustup override set nightly
 ```
 
 ## PostgresQL
+
 https://www.postgresql.org/download/
 https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
-WARNING: Console code page (437) differs from Windows code page (1252) 8-bit characters might not work correctly. See psql reference page "Notes for Windows users" for details.
+WARNING: Console code page (437) differs from Windows code page (1252) 8-bit characters might not work correctly. See
+psql reference page "Notes for Windows users" for details.
+
 ```shell
 chcp 1252
 psql --username postgres --host localhost --port 5432
 ```
+
 - Drop Database Error
-Database Name: database_name
-`*ERROR:  database "actix" is being accessed by other users*
-*DETAIL:  There are 15 other sessions using the database.*`
+  Database Name: database_name
+  `*ERROR:  database "actix" is being accessed by other users*
+  *DETAIL:  There are 15 other sessions using the database.*`
+
 ```shell
 drop database database_name;
 REVOKE CONNECT ON DATABASE database_name FROM public;
@@ -83,7 +100,9 @@ cargo watch --watch src --exec run
 ```
 
 ## Run Apollo Router with Environment variable
+
 https://github.com/apollographql/supergraph-demo-fed2/tree/main/supergraph
+
 ```shell
 cargo run --bin apollo-router -- -s ./apollo-router/supergraph.graphql -c ./apollo-router/router.yaml
 ```
@@ -207,6 +226,7 @@ make supergraph
 ```
 
 # Docker
+
 ```shell
 docker kill $(docker ps -aq); docker rm $(docker ps -aq); docker rmi $(docker images -aq); docker volume prune -f;
 
@@ -254,11 +274,15 @@ Unzip and Copy the `router.exe` file to the project root directory
 More information on the ELv2 license can be found here: https://go.apollo.dev/elv2.
 Do you accept the terms and conditions of the ELv2 license? [y/N]
 error: This command requires that you accept the terms of the ELv2 license.`
+
 ### Run:
+
 ```shell
 rover supergraph compose --config ./supergraph.yaml
 ```
+
 Instead of
+
 ```shell
 # Creates prod-schema.graphql or overwrites if it already exists
 rover supergraph compose --config ./supergraph.yaml > supergraph.graphql
