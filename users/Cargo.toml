@@ -8,23 +8,23 @@ default-run = "users"
 
 [dependencies]
 common-utils = { path = "../common-utils" }
-async-graphql = { version = "4.0.16", features = ["chrono", "log"] }
-async-graphql-actix-web = "4.0.16"
+async-graphql = { version = "5.0.3", features = ["chrono", "log"] }
+async-graphql-actix-web = "5.0.3"
 actix-web = "4.2.1"
 actix-rt = "2.7.0"
-serde = { version = "1.0.147", features = ["derive"] }
+serde = { version = "1.0.149", features = ["derive"] }
 diesel = { version = "2.0.2", features = ["postgres", "r2d2", "chrono"] }
 diesel_migrations = "2.0.0"
 dotenv = "0.15.0"
-jsonwebtoken = "8.1.1"
+jsonwebtoken = "8.2.0"
 argonautica = "0.2.0"
-chrono = { version = "0.4.22", features = ["serde"] }
+chrono = { version = "0.4.23", features = ["serde"] }
 lazy_static = "1.4.0"
 strum = "0.24.1"
 strum_macros = "0.24.3"
 
 [dev-dependencies]
-serde_json = "1.0.87"
+serde_json = "1.0.89"
 jsonpath_lib = "0.3.0"
 base64 = "0.13.1"
 testcontainers = "0.14.0"
