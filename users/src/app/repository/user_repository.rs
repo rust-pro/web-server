@@ -1,6 +1,7 @@
+use diesel::insert_into;
 use diesel::prelude::*;
 
-use crate::app::entities::user_entity::UserEntity;
+use crate::app::entities::user_entity::{RegisterUserEntity, UserEntity};
 use crate::database::schema::main;
 
 /**
@@ -16,6 +17,15 @@ pub fn get_all(conn: &mut PgConnection) -> QueryResult<Vec<UserEntity>> {
  */
 pub fn get_user_by_id(id: i32, conn: &mut PgConnection) -> QueryResult<UserEntity> {
     main::users::table.find(id).get_result(conn)
+}
+
+/**
+### Register
+Intermediate function connecting between service and database
+ */
+pub fn register(new_user: RegisterUserEntity, conn: &mut PgConnection) -> QueryResult<UserEntity> {
+    use crate::database::schema::main::users::dsl::*;
+    insert_into(users).values(new_user).get_result(conn)
 }
 
 /**
