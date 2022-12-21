@@ -1,3 +1,4 @@
+use std::time::{Instant};
 use async_graphql::{Context, EmptySubscription, ID, Object, Result, Schema};
 
 use user_repository::get_all;
@@ -52,9 +53,13 @@ impl UserMutation {
     ### Login
     A resolver is a function that's responsible for populating the data for a single field in your schema
      */
-    async fn login(&self, ctx: &Context<'_>, input: LoginRequest) -> Result<String> {
-        let existing_user = check_existing_user(&input.username, &mut context(ctx))?;
-        if verify_password(&existing_user.password, &input.password)? {
+    async fn login(&self, ctx: &Context<'_>, user: LoginRequest) -> Result<String> {
+        let existing_user = check_existing_user(&user.username, &mut context(ctx))?;
+
+        let start = Instant::now();
+        if verify_password(&existing_user.password, &user.password)? {
+            let duration = start.elapsed();
+            println!("Time elapsed: {:?}", duration);
             Ok("123".parse().unwrap())
         } else {
             Err("Loi roi".into())

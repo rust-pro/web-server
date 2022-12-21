@@ -1,9 +1,6 @@
 [workspace]
 members = [
-    'common-utils',
-    'apollo-router',
+    'common',
     'users',
-    'microservice/post-service',
-    'microservice/planets-service',
-    'microservice/satellites-service',
+    'auth-service'
 ]
