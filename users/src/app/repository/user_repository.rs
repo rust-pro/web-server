@@ -29,7 +29,7 @@ pub fn register(new_user: RegisterUserEntity, conn: &mut PgConnection) -> QueryR
 }
 
 /**
- * Check Existing User
+ * ### Check Existing User
  */
 pub fn check_existing_user(username: &str, conn: &mut PgConnection) -> QueryResult<UserEntity> {
     main::users::table
