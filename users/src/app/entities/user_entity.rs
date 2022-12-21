@@ -1,9 +1,10 @@
 use chrono::{DateTime, Local};
 use diesel::prelude::*;
+
 use crate::app::types::users::query_users::UserTypes;
 use crate::database::schema::main::users;
 
-#[derive(Identifiable,Queryable)]
+#[derive(Identifiable, Queryable)]
 #[diesel(table_name = users)]
 pub struct UserEntity {
     pub id: i32,
@@ -15,6 +16,14 @@ pub struct UserEntity {
     pub deleted_at: Option<DateTime<Local>>,
 }
 
+#[derive(Insertable, Queryable)]
+#[diesel(table_name = users)]
+pub struct RegisterUserEntity {
+    pub username: String,
+    pub email: String,
+    pub password: String,
+}
+
 impl From<&UserEntity> for UserTypes {
     fn from(entity: &UserEntity) -> Self {
         UserTypes {
@@ -23,7 +32,7 @@ impl From<&UserEntity> for UserTypes {
             email: entity.email.clone(),
             created_at: entity.created_at,
             updated_at: entity.updated_at,
-            deleted_at: entity.deleted_at
+            deleted_at: entity.deleted_at,
         }
     }
 }
