@@ -10,7 +10,7 @@ use crate::app::requests::login_request::LoginRequest;
 use crate::app::requests::register_request::RegisterRequest;
 use crate::app::types::context::context;
 use crate::app::types::users::query_users::UserTypes;
-use crate::utils::password::{hash_password, verify_password};
+use crate::utils::password::{generate_hash, verify_password};
 
 /**
  * Type UserSchema
@@ -73,7 +73,7 @@ impl UserMutation {
     async fn register(&self, ctx: &Context<'_>, user: RegisterRequest) -> Result<UserTypes> {
         let new_user = RegisterUserEntity {
             username: user.username,
-            password: hash_password(user.password.as_str())?,
+            password: generate_hash(user.password.as_str())?,
             email: user.email,
         };
 
