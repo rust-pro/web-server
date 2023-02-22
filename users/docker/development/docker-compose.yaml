@@ -1,0 +1,77 @@
+version: '3.9'
+services:
+  users:
+    build:
+      context: ../../../
+      dockerfile: ./users/docker/development/Dockerfile
+    restart: always
+    depends_on:
+      - user-db
+    links:
+      - user-db
+    environment:
+      DATABASE_URL: postgres://${DB_USERNAME}:${DB_PASSWORD}@user-db/${DB_DATABASE}
+      PASSWORD_SECRET_KEY: $PASSWORD_SECRET_KEY
+      JWT_SECRET_KEY: $JWT_SECRET_KEY
+    ports:
+      - "1405:${APP_PORT}"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost/" ]
+      interval: 1m
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+    networks:
+      - users
+
+  user-db:
+    image: postgres:15.2-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5433:5432"
+    volumes: # https://docs.docker.com/compose/compose-file/#volumes
+      - type: volume
+        source: db-data
+        target: /var/lib/postgresql/data
+        volume:
+          nocopy: true
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 1m
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    networks:
+      - users
+
+  user-db-bk:
+    image: postgres:15.2-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5434:5432"
+    volumes: # https://docs.docker.com/compose/compose-file/#volumes
+      - type: volume
+        source: db-data
+        target: /var/lib/postgresql/data
+        volume:
+          nocopy: true
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 1m
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+volumes:
+  db-data:
+networks:
+  users:
+    driver: bridge
