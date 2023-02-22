@@ -29,9 +29,10 @@ COPY users/benches ./benches
 COPY users/src ./src
 COPY users/test ./test
 
-# Build ứng dụng
+# Build app: /usr/local/cargo/bin/users
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/app/target \
     cargo install --path . --locked
 
+# Run file users in: /usr/local/cargo/bin
 CMD ["users"]
