@@ -5,13 +5,14 @@ use testcontainers::clients::Cli;
 use testcontainers::images::postgres::Postgres;
 use testcontainers::{Container, RunnableImage};
 
-use auth_service::persistence::connection::{create_connection_pool, PgPool};
-use users::run_migrations;
+use users::config::database::{create_connection, PgPool};
+use users::database::migrate::run_migrations;
+
 
 pub fn setup(docker: &Cli) -> (Container<Postgres>, PgPool) {
     dotenv().ok();
     let pg_container = setup_database(docker);
-    let pool = create_connection_pool();
+    let pool: PgPool = create_connection();
     run_migrations(&mut pool.get().expect("Can't get DB connection"));
     (pg_container, pool)
 }
