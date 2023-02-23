@@ -20,7 +20,7 @@ pub fn verify_password(hash: &str, password: &str) -> Result<bool, Error> {
 /**
  *  Hash password
  */
-pub fn hash_password(password: &str) -> Result<String, Error> {
+pub fn generate_hash(password: &str) -> Result<String, Error> {
     Hasher::default()
         .with_password(password)
         .with_secret_key(PASSWORD_SECRET_KEY.as_str())
