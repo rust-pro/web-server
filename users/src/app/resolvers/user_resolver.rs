@@ -1,5 +1,8 @@
-use std::time::{Instant};
+use std::env::var;
+use std::time::Instant;
+
 use async_graphql::{Context, EmptySubscription, ID, Object, Result, Schema};
+use dotenv::dotenv;
 
 use user_repository::get_all;
 
@@ -12,23 +15,24 @@ use crate::app::types::context::context;
 use crate::app::types::users::query_users::UserTypes;
 use crate::utils::password::{generate_hash, verify_password};
 
-/**
- * Type UserSchema
- */
+/// Type UserSchema
 pub type UserSchema = Schema<UserQuery, UserMutation, EmptySubscription>;
 
-/**
- * Declare the Structure UserQuery
- */
+/// Declare the Structure UserQuery
 pub struct UserQuery;
 
-/**
- * Declare the Structure UserQuery
- */
+/// Declare the Structure UserMutation
 pub struct UserMutation;
+
 
 #[Object]
 impl UserQuery {
+    async fn test_query(&self) -> String {
+        dotenv().ok();
+        let app_name = var("APP_NAME").unwrap_or("Word".into());
+        format!("Hello {}", app_name)
+    }
+
     /// Get all users
     async fn get_users(&self, ctx: &Context<'_>) -> Vec<UserTypes> {
         get_all(&mut context(ctx))

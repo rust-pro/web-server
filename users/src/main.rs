@@ -25,3 +25,7 @@ async fn main() -> std::io::Result<()> {
         App::new().configure(user_route).app_data(schema.clone())
     }).bind((app_url, port))?.run().await
 }
+
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
