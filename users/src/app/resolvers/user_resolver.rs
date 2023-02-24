@@ -1,4 +1,5 @@
 use std::env::var;
+use std::str::FromStr;
 use std::time::Instant;
 
 use async_graphql::{Context, EmptySubscription, ID, Object, Result, Schema};
@@ -12,8 +13,9 @@ use crate::app::repository::user_repository::{check_existing_user, get_user_by_i
 use crate::app::requests::login_request::LoginRequest;
 use crate::app::requests::register_request::RegisterRequest;
 use crate::app::types::context::context;
+use crate::app::types::RoleAuth;
 use crate::app::types::users::query_users::UserTypes;
-use crate::utils::password::{generate_hash, verify_password};
+use crate::utils::password::{create_jwt_token, generate_hash, get_jwt_secret_key, verify_password};
 
 /// Type UserSchema
 pub type UserSchema = Schema<UserQuery, UserMutation, EmptySubscription>;
@@ -57,14 +59,18 @@ impl UserMutation {
     ### Login
     A resolver is a function that's responsible for populating the data for a single field in your schema
      */
-    async fn login(&self, ctx: &Context<'_>, user: LoginRequest) -> Result<String> {
-        let existing_user = check_existing_user(&user.username, &mut context(ctx))?;
+    async fn login(&self, ctx: &Context<'_>, user_input: LoginRequest) -> Result<String> {
+        let existing_user = check_existing_user(&user_input.username, &mut context(ctx))?;
 
         let start = Instant::now();
-        if verify_password(&existing_user.password, &user.password)? {
+        if verify_password(&existing_user.password, &user_input.password)? {
+
+            let role = RoleAuth::from_str(existing_user.role.as_str())?;
+            let new_token = create_jwt_token(existing_user.username, role, &get_jwt_secret_key())?;
+
             let duration = start.elapsed();
             println!("Time elapsed: {:?}", duration);
-            Ok("123".parse().unwrap())
+            Ok(new_token)
         } else {
             Err("Loi roi".into())
         }
@@ -79,6 +85,7 @@ impl UserMutation {
             username: user.username,
             password: generate_hash(user.password.as_str())?,
             email: user.email,
+            role: user.role
         };
 
         let created_user_entity = register(new_user, &mut context(ctx))?;
