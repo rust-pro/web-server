@@ -10,6 +10,33 @@
 </p>
 
 ___
+### Remote repository
+
+```shell
+git remote -v
+
+git remote add origin git@github.com:rust-pro/web-server.git
+git remote add gitlab git@gitlab.com:rust-inc/web-server.git
+git remote add bitbucket git@bitbucket.org:hainghia/web-server.git
+
+git checkout -b develop gitlab/develop
+
+git pull origin main
+
+git push origin main
+git push gitlab main
+git push bitbucket main
+
+git add .; git commit -asm "CICD Github action Test CICD";git push origin main; git push gitlab main; git push bitbucket main
+```
+
+### Connect EC2
+
+```shell
+ssh ubuntu@52.199.234.46 -i ~/.ssh/amazonkey.pem
+ssh ec2-user@54.248.133.22 -i ~/.ssh/amazonkey.pem
+```
+
 
 ## Prerequisites (Windows 11) - Powershell 7.3.1
 
