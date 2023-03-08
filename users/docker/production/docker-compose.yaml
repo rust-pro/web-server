@@ -3,7 +3,7 @@ services:
   users:
     build:
       context: ../../../
-      dockerfile: ./users/docker/development/Dockerfile
+      dockerfile: ./users/docker/production/Dockerfile
     restart: always
     depends_on:
       - user-db

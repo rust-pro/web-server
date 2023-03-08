@@ -1,5 +1,13 @@
-FROM rust:1.67-slim-bookworm AS builder
+# Level 2
+# Sử dụng cargo install --path và sắp xếp các Layer để tăng tốc độ Build Images kể tử sau lần build đầu tiên
 
+# Xây dựng hình ảnh có thể chạy được với các gói phụ thuộc cần thiết
+# Thời gian Build trung bình: ~600s cho lần đầu tiên, ~100s cho các lần tiếp theo
+# Kích thước hình ảnh tạo ra: 3.29GB
+
+FROM rust:1.67
+
+# Set Docker Environment Variables
 ARG USER="kukun"
 # Name project in Cargo.toml
 ARG MICRO_SERVICE_NAME="users"
@@ -39,17 +47,21 @@ COPY Cargo.lock ${MICRO_SERVICE_NAME}/Cargo.toml ${MICRO_SERVICE_NAME}/diesel.to
 
 COPY common ../common
 
-RUN cargo install --path . --locked
+# Tạo layer cho dependencies
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/app/target \
+    cargo build --release
 
 RUN rm -rf src/*.rs && rm -rf benches/*.rs
 
 COPY ${MICRO_SERVICE_NAME}/ ./
 
+# Build ứng dụng
+
 RUN rm ./target/release/deps/${MICRO_SERVICE_NAME}*
 
-RUN cargo install --path . --locked
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/app/target \
+    cargo install --path . --locked
 
-FROM debian:bookworm-slim
-RUN apt-get update && apt-get install -y libpq-dev curl
-COPY --from=builder /usr/local/cargo/bin/${MICRO_SERVICE_NAME} /bin/
 CMD ["users"]

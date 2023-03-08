@@ -10,17 +10,20 @@ start-user-development:
 	docker compose -f users/docker/development/docker-compose.yaml up -d
 
 .PHONY: stop-user-development
-stop-user-development: ## Stop the development docker container.
+stop-user-development:
 	docker compose -f users/docker/development/docker-compose.yaml down
 
-.PHONY: build-production
-build-production: ## Build the production docker image.
-	docker compose -f docker/production/docker-compose.yml build --no-cache
+.PHONY: build-user-production
+build-user-production:
+	@if [ ! -f users/docker/production/.env ]; then \
+		cp users/.env.example users/docker/production/.env; \
+	fi
+	docker compose -f docker/production/docker-compose.yaml build --no-cache
 
-.PHONY: start-production
-start-production: ## Start the production docker container.
-	docker compose -f docker/production/docker-compose.yml up -d
+.PHONY: start-user-production
+start-user-production:
+	docker compose -f docker/production/docker-compose.yaml up -d
 
-.PHONY: stop-production
-stop-production: ## Stop the production docker container.
-	docker compose -f docker/production/docker-compose.yml down
+.PHONY: stop-user-production
+stop-user-production:
+	docker compose -f docker/production/docker-compose.yaml down

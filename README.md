@@ -10,7 +10,24 @@
 </p>
 
 ___
+## Git Repositories
 
+- [GitHub](https://github.com/rust-pro/web-server)
+- [GitLab](https://gitlab.com/rust-inc/web-server)
+- [Bitbucket](https://bitbucket.org/hainghia/web-server)
+
+### Remote repository
+
+```shell
+git remote -v
+
+git remote add origin git@github.com:rust-pro/web-server.git
+git remote add gitlab git@gitlab.com:rust-inc/web-server.git
+git remote add bitbucket git@bitbucket.org:hainghia/web-server.git
+
+
+git add .; git commit -asm "Initial commit";git push origin main; git push gitlab main; git push bitbucket main
+```
 ## Prerequisites (Windows 11) - Powershell 7.3.1
 
 Before you want to try this on your local, here are requirements
@@ -382,9 +399,8 @@ migrate -source file://./src/database/migrations -database postgres://postgres:p
 ```shell
 docker kill $(docker ps -aq); docker rm $(docker ps -aq); docker rmi $(docker images -aq); docker volume prune -f;
 
-docker compose -f docker-compose.development.yml build; docker compose -f docker-compose.development.yml up;
-
-docker compose -f docker-compose.production.yml build; docker compose -f docker-compose.production.yml up;
+make stop-user-development; make build-user-development; make start-user-development
+make stop-user-production; make build-user-production; make start-user-production
 ```
 
 # Apollo Router Manager

@@ -1,5 +1,13 @@
-FROM rust:1.67-slim-bookworm AS builder
+# Level 3
+# Sử dụng rust:1.67-slim-bookworm thay vì rust:1.67
 
+# Xây dựng hình ảnh có thể chạy được với các gói phụ thuộc cần thiết
+# Thời gian Build trung bình: ~273s cho lần đầu tiên, ~20s cho các lần tiếp theo
+# Kích thước hình ảnh tạo ra: 3.02GB
+
+# 1. Install dependencies only when needed
+FROM rust:1.67-slim-bookworm AS builder
+# Set Docker Environment Variables
 ARG USER="kukun"
 # Name project in Cargo.toml
 ARG MICRO_SERVICE_NAME="users"

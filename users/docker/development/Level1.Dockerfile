@@ -1,9 +1,15 @@
+# Level 1
+# Xây dựng hình ảnh có thể chạy được với các gói phụ thuộc cần thiết
+# Thời gian Build trung bình: ~600s mỗi lần
+# Kích thước hình ảnh tạo ra: 3.62GB
+
 FROM rust:1.67
 
 # Set Docker Environment Variables
 ARG USER="kukun"
-ARG APP_NAME="Production"
-ARG WORKDIR="/app/users"
+# Name project in Cargo.toml
+ARG MICRO_SERVICE_NAME="users"
+ARG WORKDIR="/app/${MICRO_SERVICE_NAME}"
 
 ENV CARGO_TERM_COLOR="always"
 
@@ -27,13 +33,13 @@ ENV REFRESH_TOKEN_COOKIE_NAME="cookie"
 
 RUN apt-get update && apt-get install -y libpq-dev clang
 
-RUN useradd --system --groups root --user-group --create-home --home-dir /home/$USER $USER
+RUN useradd --system --groups root --user-group --create-home --home-dir /home/${USER} ${USER}
 
-WORKDIR $WORKDIR
+WORKDIR ${WORKDIR}
 
 COPY Cargo.lock ./
 COPY common ../common
-COPY users/ ./
+COPY ${MICRO_SERVICE_NAME}/ ./
 
 RUN cargo build --release
 
