@@ -10,6 +10,7 @@ pub struct UserEntity {
     pub id: i32,
     pub username: String,
     pub email: String,
+    pub role: String,
     pub password: String,
     pub created_at: DateTime<Local>,
     pub updated_at: DateTime<Local>,
@@ -22,6 +23,7 @@ pub struct RegisterUserEntity {
     pub username: String,
     pub email: String,
     pub password: String,
+    pub role: String,
 }
 
 impl From<&UserEntity> for UserTypes {
@@ -30,6 +32,7 @@ impl From<&UserEntity> for UserTypes {
             id: entity.id.into(),
             username: entity.username.clone(),
             email: entity.email.clone(),
+            role: entity.role.clone(),
             created_at: entity.created_at,
             updated_at: entity.updated_at,
             deleted_at: entity.deleted_at,

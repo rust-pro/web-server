@@ -21,6 +21,7 @@ pub mod main {
             id -> Int4,
             username -> Varchar,
             email -> Varchar,
+            role -> Varchar,
             password -> Varchar,
             created_at -> Timestamptz,
             updated_at -> Timestamptz,

@@ -1,11 +1,11 @@
 [package]
-name = "common-utils"
+name = "common"
 version = "0.1.0"
-authors = ["Roman Kudryashov <rskudryashov@gmail.com>"]
+authors = ["Ho Hai Nghia <hohainghia19@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-actix-web = "4.2.1"
-serde = { version = "1.0.147", features = ["derive"] }
+actix-web = "4.3.0"
+serde = { version = "1.0.152", features = ["derive"] }
 strum = "0.24.1"
 strum_macros = "0.24.3"

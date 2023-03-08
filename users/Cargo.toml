@@ -2,12 +2,11 @@
 name = "users"
 version = "0.1.0"
 edition = "2021"
-default-run = "users"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-common-utils = { path = "../common" }
+common = { path = "../common" }
 async-graphql = { version = "5.0.6", features = ["chrono", "log"] }
 async-graphql-actix-web = "5.0.6"
 actix-web = "4.3.0"

@@ -25,7 +25,6 @@ pub enum Role {
 
 pub fn get_role(http_request: HttpRequest) -> Result<Option<Role>, CustomError> {
     let role_header_value = http_request.headers().get("role");
-
     match role_header_value {
         Some(header_value) => {
             let header_str = header_value.to_str()?;
@@ -37,17 +36,14 @@ pub fn get_role(http_request: HttpRequest) -> Result<Option<Role>, CustomError> 
 
 pub fn check_user_role_is_allowed(getting_role_result: &Result<Option<Role>, CustomError>, allowed_role: &Role) -> Result<(), CustomError> {
     println!("input = {:?} -> {:?}", getting_role_result, allowed_role);
-
-
     let maybe_role = match getting_role_result {
         Ok(maybe_role) => maybe_role,
         Err(e) => {
             return Err(format!("Error while getting a user's role: {}", e.message)
                 .as_str()
-                .into())
+                .into());
         }
     };
-
     println!("maybe_role = {:#?}", maybe_role);
 
     match maybe_role {

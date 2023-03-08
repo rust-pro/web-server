@@ -4,5 +4,6 @@ use async_graphql::InputObject;
 pub struct RegisterRequest {
     pub username: String,
     pub email: String,
+    pub role: String,
     pub password: String,
 }

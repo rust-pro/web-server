@@ -8,5 +8,5 @@ fn fib(n: u64) -> u64 {
 }
 
 pub fn fib_criterion_benchmark(c: &mut Criterion) {
-    c.bench_function("fib 20", |b| b.iter(|| fib(black_box(20))));
+    c.bench_function("Fibonacci 1..20", |b| b.iter(|| fib(black_box(20))));
 }
