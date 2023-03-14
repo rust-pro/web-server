@@ -16,15 +16,30 @@ user-production:
 	@if [ ! -f users/docker/production/.env ]; then \
 		cp users/.env.example users/docker/production/.env; \
 	fi
-	docker compose -f users/docker/production/docker-compose.yaml build --no-cache
+	docker compose -f users/docker/production/docker-compose.yaml build
 
 	docker compose -f users/docker/production/docker-compose.yaml up -d
 
-.PHONY: user-deploy
-user-deploy:
-	docker compose -f users/docker/deploy/docker-compose.yaml up -d
+.PHONY: deploy
+deploy:
+	@if [ -z $$(docker network ls --filter name=haproxy_network -q) ]; then \
+		docker network create haproxy_network; \
+		echo "Network haproxy_network has been created successfully"; \
+	else \
+		echo "Network haproxy_network already exists"; \
+	fi
 
-# Haproxy
-.PHONY: haproxy
-haproxy:
-	docker compose -f docker/docker-compose-haproxy.yaml up -d
+	docker compose -f deploy/users/github/docker-compose.yaml down
+	docker compose -f deploy/users/gitlab/docker-compose.yaml down
+	docker compose -f deploy/web-assembly/docker-compose.yaml down
+	docker compose -f deploy/haproxy/docker-compose.yaml down
+
+	docker compose -f deploy/users/github/docker-compose.yaml build
+	docker compose -f deploy/users/gitlab/docker-compose.yaml build
+	docker compose -f deploy/web-assembly/docker-compose.yaml build
+	docker compose -f deploy/haproxy/docker-compose.yaml build
+
+	docker compose -f deploy/users/github/docker-compose.yaml up -d
+	docker compose -f deploy/users/gitlab/docker-compose.yaml up -d
+	docker compose -f deploy/web-assembly/docker-compose.yaml up -d
+	docker compose -f deploy/haproxy/docker-compose.yaml up -d

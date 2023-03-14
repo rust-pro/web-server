@@ -1,0 +1,32 @@
+services:
+  wasm:
+    image: kukun/web-assembly:latest
+    container_name: wasm
+    restart: always
+    volumes:
+      - ./nginx/log:/var/log/nginx
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      wasm:
+      haproxy_network:
+        aliases:
+          - web_assembly
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - wasm
+    depends_on:
+      - wasm
+    command: --interval 1 wasm
+    networks:
+      - wasm
+
+networks:
+  wasm:
+    driver: bridge
+  haproxy_network:
+    external: true
+    name: haproxy_network

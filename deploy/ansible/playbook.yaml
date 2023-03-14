@@ -1,0 +1,111 @@
+- hosts: all
+  name: (#4) Install Docker Engine, containerd, and Docker Compose
+  remote_user: ubuntu
+  become: yes
+  tasks:
+    - name: =====> REQUIREMENTS FOR SUCCESSFUL PLAYBOOK EXECUTION <=====
+      debug:
+        msg: "Lưu ý trong folder cần copy file .env.example > .env và thay đổi giá trị tương ứng. Tương tự đối với env.exmaple.yaml > env.yaml"
+
+    - name: (#9) Update the apt package index and install packages to allow apt to use a repository over HTTPS
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+        update_cache: yes
+
+    - name: (#46) Add Docker’s official GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: (#51) Get Ubuntu release version
+      command: lsb_release -cs
+      register: ubuntu_version
+
+    - name: (#55) Get architecture
+      command: dpkg --print-architecture
+      register: architecture
+
+    - name: (#59) Add Docker repository
+      apt_repository:
+        repo: "deb [arch={{ architecture.stdout }}] https://download.docker.com/linux/ubuntu {{ ubuntu_version.stdout }} stable"
+        state: present
+        filename: docker
+
+    - name: (#65) Update apt packages
+      apt:
+        update_cache: "yes"
+        force_apt_get: "yes"
+
+    - name: (#68) Install Docker Engine, containerd, and Docker Compose.
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+          - docker-buildx-plugin
+        state: present
+        update_cache: yes
+
+- hosts: all
+  name: (#4) Deploy applications on Docker compose
+  remote_user: ubuntu
+  become: yes
+  vars_files:
+    - env.yaml
+  vars:
+    docker_username: user_name
+    docker_password: my_password
+  tasks:
+    - name: (#27) Copy foder haproxy to EC2
+      copy:
+        src: ../haproxy
+        dest: /home/ubuntu
+        owner: ubuntu
+        group: ubuntu
+        force: yes
+
+    - name: (#27) Copy foder users to EC2
+      copy:
+        src: ../users
+        dest: /home/ubuntu
+        owner: ubuntu
+        group: ubuntu
+        force: yes
+
+    - name: (#27) Copy foder web-assembly to EC2
+      copy:
+        src: ../web-assembly
+        dest: /home/ubuntu
+        owner: ubuntu
+        group: ubuntu
+        force: yes
+
+    - name: Login to Docker Registry
+      docker_login:
+        username: "{{ docker_username }}"
+        password: "{{ docker_password }}"
+
+    - name: (#34) Stop container, Remove images, volumes, clear system
+      shell: 'docker kill $(docker ps -aq); docker rm $(docker ps -aq); docker rmi $(docker images -aq); docker volume prune -f; docker system prune --all --force'
+
+    - name: create network haproxy_network
+      shell: 'docker network create haproxy_network'
+
+    - name: Run Service users form GitHub Repository
+      shell: 'docker compose -f /home/ubuntu/users/github/docker-compose.yaml up -d'
+
+    - name: Run Service users form GitLab Repository
+      shell: 'docker compose -f /home/ubuntu/users/gitlab/docker-compose.yaml up -d'
+
+    - name: Run Web Assembly
+      shell: 'docker compose -f /home/ubuntu/web-assembly/docker-compose.yaml up -d'
+
+    - name: Run Haproxy
+      shell: 'docker compose -f /home/ubuntu/haproxy/docker-compose.yaml up -d'

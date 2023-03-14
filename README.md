@@ -485,7 +485,17 @@ Time elapsed: 3.9478ms
 
 ---
 
+## Copy public key and private key from Window to WSL
+
+```shell
+cp -r /mnt/c/Users/haing/.ssh ~/.ssh
+sudo cp -r /mnt/c/Users/haing/.ssh /root/.ssh
+```
+
+---
+
 # Deploy application system to AWS EC2 server
+
 [user.kukun.site](http://user.kukun.site/)
 
 ```shell
@@ -504,6 +514,15 @@ ssh ubuntu@18.136.104.245
 #- Public IPv4 address: 3.1.202.29
 #- Domain: kukun.site
 ssh ubuntu@3.1.202.29
+```
+
+```shell
+#- Name: Server Gia Bao
+#- Region: US
+#- Platform: Ubuntu (Linux/UNIX)
+#- Public IPv4 address: 3.92.132.157
+#- Domain: kukun.site
+ssh ubuntu@3.92.132.157
 ```
 
 #### authorized_keys

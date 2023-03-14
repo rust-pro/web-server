@@ -20,3 +20,5 @@ router
 # General
 .vagrant/
 
+# Logs
+*.log
