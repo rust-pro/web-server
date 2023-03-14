@@ -10,6 +10,7 @@
 </p>
 
 ___
+
 ## Git Repositories
 
 - [GitHub](https://github.com/rust-pro/web-server)
@@ -28,6 +29,7 @@ git remote add bitbucket git@bitbucket.org:hainghia/web-server.git
 
 git add .; git commit -asm "Initial commit";git push origin main; git push gitlab main; git push bitbucket main
 ```
+
 ## Prerequisites (Windows 11) - Powershell 7.3.1
 
 Before you want to try this on your local, here are requirements
@@ -142,6 +144,7 @@ ansible-playbook -i inventory.yaml playbook.yaml -e 'ansible_cfg=config/ansible.
 
 # Installing the Collection from Ansible Galaxy
 ansible-galaxy collection install -r requirements.yaml
+ansible-galaxy collection install community.docker
 ```
 
 ---
@@ -478,4 +481,37 @@ Out put:
 
 ```
 Time elapsed: 3.9478ms
+```
+
+---
+
+# Deploy application system to AWS EC2 server
+[user.kukun.site](http://user.kukun.site/)
+
+```shell
+#- Name: ubuntu
+#- Region: Singapore
+#- Platform: Ubuntu (Linux/UNIX)
+#- Public IPv4 address: 18.136.104.245
+#- Domain: kukun.site
+ssh ubuntu@18.136.104.245
+```
+
+```shell
+#- Name: Seminar Docker
+#- Region: Singapore
+#- Platform: Ubuntu (Linux/UNIX)
+#- Public IPv4 address: 3.1.202.29
+#- Domain: kukun.site
+ssh ubuntu@3.1.202.29
+```
+
+#### authorized_keys
+
+```shell
+Seminar Docker
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOKE7tRp++q/EjFH/0kr2Bysg70FFHo4tHNTZMpCHI7H private_key
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA1ZEgTK1fAQRL1o920apLM8nZaklDmunVlxB6WJDfzL NTA-PC
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMr9ZCl6TOwf7KoCUI8JQrlhRUACUDHqQ/8VNV59nlGL LapTop
 ```

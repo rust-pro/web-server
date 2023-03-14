@@ -1,0 +1,107 @@
+name: CI/CD Main
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rust-services:
+    runs-on: ubuntu-latest
+    steps:
+      # uses: actions/checkout@v3 trong tệp .github/workflows/ là một dòng cấu hình cho GitHub Actions.
+      # Nó chỉ định sử dụng action checkout từ tập tin actions/checkout với phiên bản v3.
+      # Action checkout cho phép bạn clone tệp của dự án từ kho lưu trữ GitHub vào môi trường runner của GitHub Actions để thực hiện các bước khác trong workflow.
+      # Điều này cho phép bạn truy cập vào mã nguồn của dự án để thực hiện các tác vụ như biên dịch, kiểm tra, v.v.
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Installs Rust toolchain
+        uses: actions-rs/toolchain@v1 # https://github.com/actions-rs/toolchain
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Runs specified cargo command Test
+        uses: actions-rs/cargo@v1 # https://github.com/actions-rs/cargo
+        with:
+          command: test
+
+  setup-buildx:
+    needs: rust-services # Chờ đợi Jobs "rust-services" hoàn thành xong mới thực hiện
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Action setup-qemu là một action của Docker, nó giúp cài đặt và cấu hình QEMU trên runner của GitHub Actions.
+      # QEMU là một trình giả lập máy tính để giả lập các hệ điều hành khác trên máy chủ của bạn.
+      # Sử dụng action setup-qemu có thể giúp bạn kiểm tra và xác nhận rằng dự án của bạn hoạt động tốt trên các nền tảng khác nhau,
+      # https://github.com/docker/setup-qemu-action
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      # Action setup-buildx là một action của Docker, nó giúp cài đặt và cấu hình BuildKit trên runner của GitHub Actions.
+      # BuildKit là một tập hợp công cụ để xây dựng các ảnh Docker, giúp tăng tốc độ và hiệu suất của quá trình xây dựng.
+      # Sử dụng action setup-buildx giúp bạn tận dụng tối đa tính năng của BuildKit trong quá trình xây dựng các ảnh Docker cho dự án của bạn.
+      # https://docs.docker.com/build/ci/github-actions/configure-builder/
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+  user-service:
+    needs: [rust-services, setup-buildx]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # if: github.event_name != 'pull_request' là một điều kiện cho bước này. Nó chỉ cho phép bước này chạy khi sự kiện GitHub không phải là "pull request".
+      # Action login-action là một action của Docker, nó giúp đăng nhập vào Docker Hub hoặc Docker Trusted Registry.
+      # DOCKER_USERNAME và DOCKER_PASSWORD trong https://github.com/{username}/{repository}/settings/secrets/actions
+      # Bước này giúp bạn đăng nhập vào Docker Hub hoặc Docker Trusted Registry trong quá trình xây dựng và đăng tải các ảnh Docker cho dự án của bạn.
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v2.1.0 #https://github.com/docker/login-action
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Action này cung cấp các thông tin về tình trạng xây dựng và phiên bản của Docker image,
+      # giúp bạn theo dõi trạng thái xây dựng và phát hành của Docker image trong quá trình tích hợp của GitHub Actions.
+      # Ví dụ, bạn có thể sử dụng action này để lưu trữ thông tin về image ID, tên và phiên bản trong một biến môi trường,
+      # hoặc để gửi các thông báo cho các nhóm hoặc cá nhân khi xây dựng hoặc phát hành Docker image thành công hoặc thất bại.
+      - name: Docker meta users
+        id: users
+        uses: docker/metadata-action@v4.3.0 # https://github.com/docker/metadata-action
+        with:
+          # list of Docker images to use as base name for tagslatest
+          images: |
+            kukun/rust-users
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=schedule,pattern=nightly
+            type=semver,pattern={{version}}
+            type=ref,event=branch
+            type=sha
+            type=raw,value=latest
+
+      # Action này tích hợp với Docker CLI để xây dựng và đăng tải một Docker image lên Docker Hub hoặc một Docker registry khác.
+      # Bạn có thể sử dụng action này để tự động hóa quá trình xây dựng và phát hành Docker image sau khi nhận được một sự kiện từ GitHub,
+      # ví dụ như khi có một commit mới hoặc khi một pull request được chấp nhận.
+      # Bạn có thể cấu hình action này để sử dụng một Dockerfile để xây dựng Docker image,
+      # hoặc sử dụng một context từ một thư mục hoặc từ một URL để xây dựng Docker image.
+      # Bạn cũng có thể cấu hình các tham số cho Docker CLI, ví dụ như tên Docker image và phiên bản,
+      # hoặc các biến môi trường để sử dụng trong quá trình xây dựng.
+
+      - name: Build and push users production
+        uses: docker/build-push-action@v4.0.0 # https://github.com/docker/build-push-action
+        with:
+          context: .
+          file: ./users/docker/production/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.users.outputs.tags }}
+

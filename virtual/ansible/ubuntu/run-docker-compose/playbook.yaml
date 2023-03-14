@@ -1,0 +1,78 @@
+- hosts: all
+  name: (#2) Run docker compose
+  remote_user: ubuntu
+  become: yes
+  vars_files:
+    - env.yaml
+  vars:
+    docker_username: user_name
+    docker_password: my_password
+  tasks:
+    - name: Login to Docker Registry
+      docker_login:
+        username: "{{ docker_username }}"
+        password: "{{ docker_password }}"
+
+    - name: (#34) Stop container, Remove images, volumes, clear system
+      shell: 'docker kill $(docker ps -aq); docker rm $(docker ps -aq); docker rmi $(docker images -aq); docker volume prune -f; docker system prune --all --force'
+
+    - name: create network haproxy_network
+      shell: 'docker network create haproxy_network'
+
+    - name: Create directory haproxy
+      file:
+        path: haproxy/config
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+        state: directory
+
+    - name: (#11) Copy file Haproxy deployment to EC2
+      copy:
+        src: ../../../../docker/docker-compose-haproxy.yaml
+        dest: /home/ubuntu/haproxy/docker-compose.yaml
+        owner: ubuntu
+        group: ubuntu
+        force: yes
+        mode: '0644'
+
+    - name: (#20) Copy file Haproxy config deployment to EC2
+      copy:
+        src: ../../../../docker/config/haproxy.cfg
+        dest: /home/ubuntu/haproxy/config/haproxy.cfg
+        owner: ubuntu
+        group: ubuntu
+        force: yes
+        mode: '0644'
+
+    - name: Run Haproxy docker-compose.yaml
+      shell: 'docker compose -f /home/ubuntu/haproxy/docker-compose.yaml up -d'
+
+    - name: Create directory service_user
+      file:
+        path: service_user
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+        state: directory
+
+    - name: (#11) Copy file User deployment to EC2
+      copy:
+        src: ../../../../users/docker/deploy/docker-compose.yaml
+        dest: /home/ubuntu/service_user/docker-compose.yaml
+        owner: ubuntu
+        group: ubuntu
+        force: yes
+        mode: '0644'
+
+    - name: (#13) Copy file .env for User deployment to EC2
+      copy:
+        src: ../../../../users/.env.example
+        dest: /home/ubuntu/service_user/.env
+        owner: ubuntu
+        group: ubuntu
+        force: yes
+        mode: '0644'
+
+    - name: Run docker-compose.yaml in service_user
+      shell: 'docker compose -f /home/ubuntu/service_user/docker-compose.yaml up -d'

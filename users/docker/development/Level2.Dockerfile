@@ -43,7 +43,7 @@ RUN USER=root cargo init
 
 RUN mkdir -p benches && echo 'fn main() { println!("Hello, bench!"); }' > benches/main.rs
 
-COPY Cargo.lock ${MICRO_SERVICE_NAME}/Cargo.toml ${MICRO_SERVICE_NAME}/diesel.toml ${MICRO_SERVICE_NAME}/docker/development/.env ./
+COPY Cargo.lock ${MICRO_SERVICE_NAME}/Cargo.toml ${MICRO_SERVICE_NAME}/diesel.toml ./
 
 COPY common ../common
 

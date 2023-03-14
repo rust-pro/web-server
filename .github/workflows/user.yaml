@@ -1,4 +1,4 @@
-name: Development
+name: CI/CD Service Users
 
 on:
   push:
@@ -10,38 +10,23 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  test-rust-services:
+  rust-services:
     runs-on: ubuntu-latest
     steps:
+      # uses: actions/checkout@v3 trong tệp .github/workflows/ là một dòng cấu hình cho GitHub Actions.
+      # Nó chỉ định sử dụng action checkout từ tập tin actions/checkout với phiên bản v3.
+      # Action checkout cho phép bạn clone tệp của dự án từ kho lưu trữ GitHub vào môi trường runner của GitHub Actions để thực hiện các bước khác trong workflow.
+      # Điều này cho phép bạn truy cập vào mã nguồn của dự án để thực hiện các tác vụ như biên dịch, kiểm tra, v.v.
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup
-        uses: actions-rs/toolchain@v1
+        uses: actions/checkout@v3
+
+      - name: Installs Rust toolchain
+        uses: actions-rs/toolchain@v1 # https://github.com/actions-rs/toolchain
         with:
           toolchain: stable
-      - name: Test
-        uses: actions-rs/cargo@v1
+          override: true
+
+      - name: Runs specified cargo command Test
+        uses: actions-rs/cargo@v1 # https://github.com/actions-rs/cargo
         with:
           command: test
-
-  auth-service-image:
-    needs: test-rust-services
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: ./auth-service/Dockerfile
-          push: ${{ github.event_name == 'push' }}
-          tags: kudryashovroman/graphql-rust:auth-service
-

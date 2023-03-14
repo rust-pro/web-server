@@ -1,0 +1,46 @@
+- hosts: all
+  name: (#2) Run docker compose
+  remote_user: ubuntu
+  become: yes
+  vars:
+    docker_username: kukun
+    docker_password: my_password
+  tasks:
+    - name: (#6) Copy file docker-compose.yaml to EC2
+      copy:
+        src: ../../../../docker-compose.yaml
+        dest: /home/ubuntu/docker-compose.yaml
+        force: yes
+        mode: '0644'
+
+    - name: (#13) Copy file .env to EC2
+      copy:
+        src: ../../../../.env.example
+        dest: /home/ubuntu/.env
+        force: yes
+        mode: '0644'
+
+    - name: (#20) Copy foder docker/aws/etc  Docker to EC2
+      copy:
+        src: ../../../aws/etc
+        dest: /home/ubuntu/docker/aws
+        force: yes
+        mode: '0755'
+
+    - name: (#27) Copy foder docker/aws/usr  Docker to EC2
+      copy:
+        src: ../../../aws/usr
+        dest: /home/ubuntu/docker/aws
+        force: yes
+        mode: '0755'
+
+    - name: Login to Docker Registry
+      docker_login:
+        username: "{{ docker_username }}"
+        password: "{{ docker_password }}"
+
+    - name: (#34) Stop container, Remove images, volumes
+      shell: 'docker kill $(docker ps -aq); docker rm $(docker ps -aq); docker volume prune -f'
+
+    - name: (#37) Run docker-compose.yaml file
+      command: docker compose up -d

@@ -1,5 +1,5 @@
-FROM rust:1.67-slim-bookworm AS builder
-
+FROM rust:1.68-slim-bookworm AS builder
+# Set Docker Environment Variables
 ARG USER="kukun"
 # Name project in Cargo.toml
 ARG MICRO_SERVICE_NAME="users"
@@ -35,7 +35,7 @@ RUN USER=root cargo init
 
 RUN mkdir -p benches && echo 'fn main() { println!("Hello, bench!"); }' > benches/main.rs
 
-COPY Cargo.lock ${MICRO_SERVICE_NAME}/Cargo.toml ${MICRO_SERVICE_NAME}/diesel.toml ${MICRO_SERVICE_NAME}/docker/development/.env ./
+COPY Cargo.lock ${MICRO_SERVICE_NAME}/Cargo.toml ${MICRO_SERVICE_NAME}/diesel.toml ./
 
 COPY common ../common
 
@@ -52,4 +52,5 @@ RUN cargo install --path . --locked
 FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y libpq-dev curl
 COPY --from=builder /usr/local/cargo/bin/${MICRO_SERVICE_NAME} /bin/
+EXPOSE ${APP_PORT}
 CMD ["users"]

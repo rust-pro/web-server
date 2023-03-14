@@ -1,6 +1,6 @@
 - hosts: all
   name: (#4) Setup All hosts
-  remote_user: kukun
+  remote_user: ubuntu
   become: yes
   tasks:
     - name: (#9) Update the apt package index and install packages to allow apt to use a repository over HTTPS
@@ -11,8 +11,6 @@
           - curl
           - gnupg
           - lsb-release
-          - git
-          - build-essential
         state: present
         update_cache: yes
 
@@ -49,9 +47,3 @@
           - docker-compose-plugin
         state: present
         update_cache: yes
-
-    - name: Install Rust
-      shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-    - name: Reload PATH environment variable to include
-      shell: source $HOME/.cargo/env
