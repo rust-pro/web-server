@@ -42,11 +42,44 @@ docker network create microservice_user_network
 
 docker run --name some-postgres --network microservice_user_network --network-alias microservice_user_db --env POSTGRES_USER=postgres --env POSTGRES_PASSWORD=mysecretpassword --env POSTGRES_DB=users --detach postgres
 
-docker run --name some-user --publish 80:80 --network microservice_user_network --network-alias microservice_user --env APP_URL=0.0.0.0 --env DB_HOST=microservice_user_db --env DB_USERNAME=postgres --env DB_PASSWORD=mysecretpassword --env DB_DATABASE=users --detach kukun/rust-users
+docker run --name some-user --publish 80:80 --network microservice_user_network --network-alias microservice_user --env APP_URL=0.0.0.0 --env DB_HOST=microservice_user_db --env DB_USERNAME=postgres --env DB_PASSWORD=mysecretpassword --env DB_DATABASE=users --env ACCESS_TOKEN_SECRET=mysecrettoken --env REFRESH_TOKEN_SECRET=mysecrettoken --env PASSWORD_SECRET_KEY=mysecrettoken --env JWT_SECRET_KEY=mysecrettoken --detach kukun/rust-users
 
 docker network inspect microservice_user_network
 
 ```
+
+Linux
+```yaml
+docker network create microservice_user_network
+
+docker run --name some-postgres \
+--network microservice_user_network \
+--network-alias microservice_user_db \
+--env POSTGRES_USER=postgres \
+--env POSTGRES_PASSWORD=mysecretpassword \
+--env POSTGRES_DB=users \
+--detach postgres
+
+docker run --name some-user \
+--publish 80:80 \
+--network microservice_user_network \
+--network-alias microservice_user \
+--env APP_URL=0.0.0.0 \
+--env DB_HOST=microservice_user_db \
+--env DB_USERNAME=postgres \
+--env DB_PASSWORD=mysecretpassword \
+--env DB_DATABASE=users \
+--env ACCESS_TOKEN_SECRET=mysecrettoken \
+--env REFRESH_TOKEN_SECRET=mysecrettoken \
+--env PASSWORD_SECRET_KEY=mysecrettoken \
+--env JWT_SECRET_KEY=mysecrettoken \
+--detach \
+kukun/rust-users
+
+docker network inspect microservice_user_network
+```
+
+
 
 ## Example docker-compose.yml for `kukun/rust-users`:
 
