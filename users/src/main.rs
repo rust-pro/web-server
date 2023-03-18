@@ -13,7 +13,7 @@ use users::database::migrate::run_migrations;
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
-    let app_url = var("APP_URL").unwrap_or("127.0.0.1".into()); // Docker: 0.0.0.0
+    let app_url = var("APP_URL").unwrap_or("0.0.0.0".into()); // Docker: 0.0.0.0
     let port = var_os("APP_PORT").unwrap_or("80".into());
     let port = port.to_str().unwrap().parse::<u16>().unwrap();
     let pool: PgPool = create_connection();
