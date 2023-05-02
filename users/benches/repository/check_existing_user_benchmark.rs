@@ -11,7 +11,7 @@ pub fn check_existing_user_benchmark(c: &mut Criterion) {
     c.bench_function("Find User existing in Database", |b| {
         let mut conn = pool.get().unwrap();
         b.iter(|| {
-            let _user: UserEntity = check_existing_user(black_box("kukun"), &mut conn).unwrap();
+            let _user: UserEntity = check_existing_user(black_box("admin"), &mut conn).unwrap();
         });
     });
 }
